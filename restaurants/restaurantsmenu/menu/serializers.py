@@ -30,7 +30,7 @@ class ModifiersSerializers(serializers.ModelSerializer):
 
     class Meta:
         model = Modifiers
-        fields = ['id','title','description','price','item']
+        fields = ['id','title','description','price']
 
 
 class ItemSerializers1(WritableNestedModelSerializer):

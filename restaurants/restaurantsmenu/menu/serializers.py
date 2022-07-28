@@ -30,11 +30,18 @@ class ModifiersSerializers(serializers.ModelSerializer):
 
     class Meta:
         model = Modifiers
-        fields = ['id','title','description','price']
+        fields = ['id','title','description','price','item']
 
+
+class ModifiersSerializers1(serializers.ModelSerializer):
+    title = serializers.CharField(source='name')
+
+    class Meta:
+        model = Modifiers
+        fields = ['id','title','description','price',]
 
 class ItemSerializers1(WritableNestedModelSerializer):
-    modifiers = ModifiersSerializers(many=True,)
+    modifiers = ModifiersSerializers1(many=True,)
     title = serializers.CharField(source='name')
 
     class Meta:

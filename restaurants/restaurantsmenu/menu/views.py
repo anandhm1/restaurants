@@ -43,20 +43,20 @@ class IteamMapModifiersViews(viewsets.ViewSet):
     def retrieve(self, request, pk):
 
         try:
-            std= Modifiers.objects.get(id=pk)
-        except Modifiers.DoesNotExist:
+            std= Item.objects.get(id=pk)
+        except Item.DoesNotExist:
             return Response({'msg':'record not found'},status=status.HTTP_404_NOT_FOUND)
-        serializer = ModifiersSerializers(std)
+        serializer = ItemSerializers1(std)
         return Response(serializer.data,status=status.HTTP_200_OK)
 
 
     def update(self,request,pk):
         try:
-            std=Modifiers.objects.get(id=pk)
+            std= Item.objects.get(id=pk)
             print(std)
-        except Modifiers.DoestNotExist:
+        except Item.DoestNotExist:
             return Response({'msg':'record not found'})
-        serializer = ModifiersSerializers(std,data=request.data,partial=True)
+        serializer = ItemSerializers1(std,data=request.data,partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data,status=status.HTTP_205_RESET_CONTENT)

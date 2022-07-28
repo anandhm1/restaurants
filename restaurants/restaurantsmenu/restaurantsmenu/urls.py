@@ -21,20 +21,20 @@ from rest_framework import routers
 
 rout = routers.DefaultRouter()
 rout1 = routers.DefaultRouter()
+rout2 = routers.DefaultRouter()
 
 rout.register('section',SectionViews)
 rout.register('item',ItemViews)
 rout.register('modifiers',ModifiersViews)
-rout.register('iteammapmodifier',NestIteamMapModifiersViews)
-rout.register('menu',MenuViews,basename='menu')
+#rout1.register('iteammapmodifier',NestIteamMapModifiersViews)
+rout2.register('menu',MenuViews,basename='menu')
 rout1.register('iteammap',IteamMapModifiersViews,basename='iteammap')
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('section/',include(rout.urls)),
-    path('item/',include(rout.urls)),
-    path('modifiers/',include(rout.urls)),
-    path('menu/',include(rout.urls)),
-    path('iteammapmodifier/',include(rout.urls)),
-    path('iteammap/',include(rout1.urls)),
+    path('apicurd/',include(rout.urls)),
+    path('apimap/',include(rout1.urls)),
+    path('apimenu/',include(rout2.urls)),
+    #path('iteammapmodifier/', include(rout.urls)),
 
 ]

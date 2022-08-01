@@ -16,6 +16,11 @@ class ItemSerializers(serializers.ModelSerializer):
         model = Item
         fields = "__all__"
 
+    def to_representation(self, instance):
+        rep = super(ItemSerializers, self).to_representation(instance)
+        rep['section'] = instance.section.name
+        return rep
+
     def validate(self,data):
         item = Item.objects.values_list('name', flat=True)
         if data['name'] in item:
@@ -26,6 +31,7 @@ class ItemSerializers(serializers.ModelSerializer):
 
 
 class ModifiersSerializers(serializers.ModelSerializer):
+    item = serializers.StringRelatedField(many=True, read_only=True)
     title = serializers.CharField(source='name')
 
     class Meta:
@@ -33,12 +39,15 @@ class ModifiersSerializers(serializers.ModelSerializer):
         fields = ['id','title','description','price','item']
 
 
+
+
 class ModifiersSerializers1(serializers.ModelSerializer):
     title = serializers.CharField(source='name')
 
     class Meta:
         model = Modifiers
-        fields = ['id','title','description','price',]
+        fields = ['id','title','description','price']
+
 
 class ItemSerializers1(WritableNestedModelSerializer):
     modifiers = ModifiersSerializers1(many=True,)
@@ -47,6 +56,13 @@ class ItemSerializers1(WritableNestedModelSerializer):
     class Meta:
         model = Item
         fields = ['id','title',"description",'price','modifiers']
+
+
+    def validate(self,data):
+        item = Item.objects.values_list('name', flat=True)
+        if data['name'] in item:
+            raise serializers.ValidationError("Item is already exists")
+        return data
 
 
 

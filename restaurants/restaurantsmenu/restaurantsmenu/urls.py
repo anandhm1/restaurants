@@ -21,7 +21,7 @@ from rest_framework import routers
 
 rout = routers.DefaultRouter()
 rout1 = routers.DefaultRouter()
-rout2 = routers.DefaultRouter()
+
 
 rout.register('section',SectionViews)
 rout.register('item',ItemViews)

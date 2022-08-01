@@ -26,15 +26,15 @@ rout2 = routers.DefaultRouter()
 rout.register('section',SectionViews)
 rout.register('item',ItemViews)
 rout.register('modifiers',ModifiersViews)
-#rout1.register('iteammapmodifier',NestIteamMapModifiersViews)
-rout2.register('menu',MenuViews,basename='menu')
-rout1.register('iteammap',IteamMapModifiersViews,basename='iteammap')
+#rout1.register('mapmodifier',NestIteamMapModifiersViews)
+rout.register('map-item-modifier',IteamMapModifiersViews,basename='map-item-modifier')
+rout.register('menu',MenuViews,basename='menu')
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('apicurd/',include(rout.urls)),
-    path('apimap/',include(rout1.urls)),
-    path('apimenu/',include(rout2.urls)),
-    #path('iteammapmodifier/', include(rout.urls)),
+    path('api/',include(rout.urls)),
+    # path('map-item-modifier/',include(rout.urls)),
+    # path('menu/',include(rout.urls)),
 
 ]

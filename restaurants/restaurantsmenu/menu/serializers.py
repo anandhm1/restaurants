@@ -31,7 +31,7 @@ class ItemSerializers(serializers.ModelSerializer):
 
 
 class ModifiersSerializers(serializers.ModelSerializer):
-    item = serializers.StringRelatedField(many=True, read_only=True)
+    #item = serializers.StringRelatedField(many=True, read_only=True)
     title = serializers.CharField(source='name')
 
     class Meta:

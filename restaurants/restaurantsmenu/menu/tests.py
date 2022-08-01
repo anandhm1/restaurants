@@ -1,14 +1,32 @@
 from django.test import TestCase
 from .models import Item,Section,Modifiers
+from rest_framework import status
 
 
 class SectionTestCase(TestCase):
     def setUp(self):
-        Section.objects.create(name = "Dinner", description="topped with tomatoes, cheese, and often various other ingredients, which is then baked at a high")
+        data = Section.objects.create(name = "Dinner", description="topped with tomatoes, cheese, and often various other ingredients, which is then baked at a high")
 
     def test_item_info(self):
         qs = Section.objects.all()
         self.assertEqual(qs.count(),1)
+
+    def test_section_post(self):
+        data = {"title": "Chicken","description":"topped with tomatoes, cheese, and often various other ingredients, which is then baked at a high"}
+        response = self.client.post("/api/section/", data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        self.assertEqual(Section.objects.count(), 2)
+
+    def test_section_get(self):
+
+        response = self.client.get("/api/section/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+        response = self.client.get('/api/section/1/')
+        self.assertEqual(response.data, {'id': 1, "title": "Dinner",
+                                         "description": "topped with tomatoes, cheese, and often various other ingredients, which is then baked at a high"})
+
 
 class ItemTestCase(TestCase):
     def setUp(self):

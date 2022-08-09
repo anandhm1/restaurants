@@ -41,7 +41,7 @@ class ModifiersSerializers(serializers.ModelSerializer):
 
 
 
-class ModifiersSerializers1(serializers.ModelSerializer):
+class ModifiersMenuSerializer(serializers.ModelSerializer):
     title = serializers.CharField(source='name')
 
     class Meta:
@@ -49,8 +49,8 @@ class ModifiersSerializers1(serializers.ModelSerializer):
         fields = ['id','title','description','price']
 
 
-class ItemSerializers1(WritableNestedModelSerializer):
-    modifiers = ModifiersSerializers1(many=True,)
+class ItemMenuSerializer(WritableNestedModelSerializer):
+    modifiers = ModifiersMenuSerializer(many=True,)
     title = serializers.CharField(source='name')
 
     class Meta:
@@ -58,16 +58,10 @@ class ItemSerializers1(WritableNestedModelSerializer):
         fields = ['id','title',"description",'price','modifiers']
 
 
-    def validate(self,data):
-        item = Item.objects.values_list('name', flat=True)
-        if data['name'] in item:
-            raise serializers.ValidationError("Item is already exists")
-        return data
+   
 
-
-
-class SectionSerializer1(serializers.ModelSerializer):
-    items = ItemSerializers1(many=True, read_only=True)
+class SectionMenuSerializer(serializers.ModelSerializer):
+    items = ItemMenuSerializer(many=True, read_only=True)
     title = serializers.CharField(source='name')
 
     class Meta:

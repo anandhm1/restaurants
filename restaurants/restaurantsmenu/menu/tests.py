@@ -5,7 +5,7 @@ from rest_framework import status
 
 class SectionTestCase(TestCase):
     def setUp(self):
-        data = Section.objects.create(name="Dinner",
+        Section.objects.create(name="Dinner",
                                       description="topped with tomatoes, cheese, and often various other ingredients, which is then baked at a high")
 
     def test_item_info(self):
@@ -51,7 +51,6 @@ class ItemTestCase(TestCase):
     def test_item_info(self):
         qs = Item.objects.all()
         self.assertEqual(qs.count(), 1)
-
 
 
 

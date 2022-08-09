@@ -21,20 +21,18 @@ from menu.views import SectionViews, ItemViews, ModifiersViews, ItemMapModifiers
 
 rout = routers.DefaultRouter()
 rout1 = routers.DefaultRouter()
-rout2 = routers.DefaultRouter()
+
 
 rout.register('section',SectionViews)
 rout.register('item',ItemViews)
 rout.register('modifiers',ModifiersViews)
-#rout1.register('mapmodifier',NestIteamMapModifiersViews)
-rout2.register('map-item-modifier',ItemMapModifiersView,basename='map-item-modifier')
+rout1.register('map-item-modifier',ItemMapModifiersView,basename='map-item-modifier')
 rout.register('menu',MenuViews,basename='menu')
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/',include(rout.urls)),
-    path('map/',include(rout2.urls)),
-    # path('map-item-modifier/',include(rout.urls)),
-    # path('menu/',include(rout.urls)),
+    path('map/',include(rout1.urls)),
 
 ]

@@ -3,7 +3,7 @@ from rest_framework import serializers
 from drf_writable_nested.serializers import WritableNestedModelSerializer
 
 
-class SectionSerializers(serializers.ModelSerializer):
+class SectionSerializer(serializers.ModelSerializer):
     title = serializers.CharField(source='name')
 
     class Meta:
@@ -11,13 +11,13 @@ class SectionSerializers(serializers.ModelSerializer):
         fields = ['id','title','description']
 
 
-class ItemSerializers(serializers.ModelSerializer):
+class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
         fields = "__all__"
 
     def to_representation(self, instance):
-        rep = super(ItemSerializers, self).to_representation(instance)
+        rep = super(ItemSerializer, self).to_representation(instance)
         rep['section'] = instance.section.name
         return rep
 
@@ -30,14 +30,12 @@ class ItemSerializers(serializers.ModelSerializer):
 
 
 
-class ModifiersSerializers(serializers.ModelSerializer):
-    #item = serializers.StringRelatedField(many=True, read_only=True)
+class ModifiersSerializer(serializers.ModelSerializer):
     title = serializers.CharField(source='name')
 
     class Meta:
         model = Modifiers
         fields = ['id','title','description','price','item']
-
 
 
 
@@ -47,6 +45,12 @@ class ModifiersMenuSerializer(serializers.ModelSerializer):
     class Meta:
         model = Modifiers
         fields = ['id','title','description','price']
+
+    def validate(self,data):
+        modifier = Modifiers.objects.values_list('name', flat=True)
+        if data['name'] not in modifier:
+            raise serializers.ValidationError("modifiers is on exist")
+        return data
 
 
 class ItemMenuSerializer(WritableNestedModelSerializer):
@@ -58,7 +62,7 @@ class ItemMenuSerializer(WritableNestedModelSerializer):
         fields = ['id','title',"description",'price','modifiers']
 
 
-   
+
 
 class SectionMenuSerializer(serializers.ModelSerializer):
     items = ItemMenuSerializer(many=True, read_only=True)

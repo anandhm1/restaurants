@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .serializers import SectionSerializers, ItemSerializers, ModifiersSerializers,SectionSerializer1,ItemSerializers1
+from .serializers import SectionSerializers, ItemSerializers, ModifiersSerializers,SectionMenuSerializer,ModifiersMenuSerializer,ItemMenuSerializer
 from .models import Section, Item, Modifiers
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -26,7 +26,7 @@ class MenuViews(viewsets.ViewSet):
 
     def list(self, request):
         std1 = Section.objects.all()
-        serializer = SectionSerializer1(std1, many = True)
+        serializer = SectionMenuSerializer(std1, many = True)
         return Response(serializer.data, status = status.HTTP_200_OK)
 
 
@@ -36,32 +36,34 @@ class MenuViews(viewsets.ViewSet):
             std= Section.objects.get(id=pk)
         except Section.DoesNotExist:
             return Response({'msg':'record not found'},status=status.HTTP_404_NOT_FOUND)
-        serializer = SectionSerializer1(std)
+        serializer = SectionMenuSerializer(std)
         return Response(serializer.data,status=status.HTTP_200_OK)
 
-class IteamMapModifiersViews(viewsets.ViewSet):
+class ItemMapModifiersView(viewsets.ViewSet):
     def retrieve(self, request, pk):
 
         try:
             std= Item.objects.get(id=pk)
         except Item.DoesNotExist:
             return Response({'msg':'record not found'},status=status.HTTP_404_NOT_FOUND)
-        serializer = ItemSerializers1(std)
+        serializer = ItemMenuSerializer(std)
         return Response(serializer.data,status=status.HTTP_200_OK)
 
 
     def update(self,request,pk):
         try:
-            std= Item.objects.get(id=pk)
+            std=Item.objects.get(id=pk)
             print(std)
         except Item.DoestNotExist:
             return Response({'msg':'record not found'})
-        serializer = ItemSerializers1(std,data=request.data,partial=True)
+        serializer = ItemMenuSerializer(std,data=request.data,partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data,status=status.HTTP_205_RESET_CONTENT)
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
-class NestIteamMapModifiersViews(viewsets.ModelViewSet):
-    serializer_class = ItemSerializers1
-    queryset = Item.objects.all()
+
+#
+# class NestIteamMapModifiersViews(viewsets.ModelViewSet):
+#     serializer_class = ItemMenuSerializer
+#     queryset = Item.objects.all()
